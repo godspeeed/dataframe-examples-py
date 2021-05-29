@@ -8,9 +8,7 @@ if __name__ == '__main__':
     spark = SparkSession \
         .builder \
         .appName("Read Files") \
-        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
         .getOrCreate()
-        # .master('local[*]') \
     spark.sparkContext.setLogLevel('ERROR')
 
     current_dir = os.path.abspath(os.path.dirname(__file__))
@@ -63,7 +61,7 @@ if __name__ == '__main__':
     finance_df \
         .repartition(2) \
         .write \
-        .partitionBy("id") \
+        .partitionBy("has_debt") \
         .mode("overwrite") \
         .option("header", "true") \
         .option("delimiter", "~") \
