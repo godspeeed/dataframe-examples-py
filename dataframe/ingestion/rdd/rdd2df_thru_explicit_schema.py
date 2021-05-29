@@ -11,8 +11,6 @@ if __name__ == '__main__':
     spark = SparkSession \
         .builder \
         .appName("DataFrames examples") \
-        .config('spark.jars.packages', 'org.apache.hadoop:hadoop-aws:2.7.4') \
-        .master('local[*]') \
         .getOrCreate()
 
     spark.sparkContext.setLogLevel("ERROR")
@@ -36,7 +34,7 @@ if __name__ == '__main__':
         .filter(lambda record: record.find("txn_id")) \
         .map(lambda record: record.split("|")) \
         .map(lambda record: Row(int(record[0]), int(record[1]), float(record[2]), int(record[3]), int(record[4]), int(record[5]), record[6]))
-        # RDD[Row[Long, Long, Double, Long, Int, Long, String]]
+        # RDD[Row[int, int, float, int, int, int, str]]
 
     # Creating the schema
     txn_fct_schema = StructType([
@@ -62,6 +60,8 @@ if __name__ == '__main__':
 
     print("# of records = " + str(txn_fct_df.count()))
     print("# of merchants = " + str(txn_fct_df.select(txn_fct_df["merchant_id"]).distinct().count()))
+
+    print("# of partitions currently: ", txn_fct_df.rdd.getNumPartitions())
 
     txnAggDf = txn_fct_df \
         .repartition(10, txn_fct_df["merchant_id"]) \
