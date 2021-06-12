@@ -15,7 +15,7 @@ if __name__ == '__main__':
     #Secret Manager
     client = boto3.client('secretsmanager')
     response = client.get_secret_value(
-        SecretID='AWS/MyFirstSecret'
+        SecretId='AWS/MyFirstSecret'
     )
     secretDict = json.load(response['SecretString'])
 
