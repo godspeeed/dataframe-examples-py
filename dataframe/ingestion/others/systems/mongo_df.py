@@ -20,7 +20,6 @@ if __name__ == '__main__':
     spark = SparkSession \
         .builder \
         .appName("Read ingestion enterprise applications") \
-        .master('local[*]') \
         .config("spark.mongodb.input.uri", app_secret["mongodb_config"]["uri"])\
         .getOrCreate()
     spark.sparkContext.setLogLevel('ERROR')
